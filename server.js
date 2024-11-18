@@ -4,6 +4,9 @@ const { connectDb } = require('./src/config/db');
 const app = express();
 const cors = require('cors');
 const { initialValues } = require('./src/utils/initials');
+const { authentication } = require('./src/middleware/auth.middleware');
+const { listAllUsers } = require('./src/controller/v1/user/userManagementController');
+
 
 //parse body
 app.use(express.json());
@@ -17,6 +20,19 @@ initialValues();
 //admin routes
 const adminRoutes = require('./src/routes/admin/adminRoute');
 app.use("/v1/admin", adminRoutes);
+
+//staff routes
+const staffRoutes = require('./src/routes/staff/staffRoute');
+app.use("/v1/staff", staffRoutes);
+
+//manager routes
+const managerRoutes = require('./src/routes/manager/managerRoute');
+app.use("/v1/manager", managerRoutes);
+
+//product routes
+const productRoutes = require('./src/routes/product/productRoute');
+app.use("/v1/product", productRoutes);
+
 
 //listen server
 const port = CONFIG.port || 3000;
