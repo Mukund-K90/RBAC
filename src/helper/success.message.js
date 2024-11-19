@@ -10,4 +10,7 @@ module.exports.SUCCESS_MESSAGE = {
 
     PRODUCT_ADD: "Product added succefully",
     PRODUCT_DELETED: "Product deleted succefully",
+
+    ORDER_PLACED: "Order placed successfully",
+    STATUS_UPDATE: "Status updated successfully",
 };

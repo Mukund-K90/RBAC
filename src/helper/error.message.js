@@ -9,10 +9,15 @@ module.exports.ERROR_MESSAGE = {
     NOT_DELETE_ADMIN: "Can't delete admin",
 
     DATA_NOT_UPDATE: "Data not updated!",
-    PRODUCT_NOT_DELETED: "Product not deleted",
     NOT_UPDATE_ROLE: "You are not allowed to modify user roles",
 
     PRODUCT_NOT_ADD: "Product not added!",
+    PRODUCT_NOT_DELETED: "Product not deleted",
+    PRODUCT_NOT_FOUND: "Product not found",
+
+
+    ORDER_NOT_ADD: "Order not placed",
+    STATUS_NOT_UPDATE: "Status not updated",
 
     COMPARE_PASSWORD: "Password does not match.",
     TOKEN_SAVE_FAILED: "Failed to save token.",

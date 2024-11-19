@@ -39,3 +39,13 @@ module.exports.delete = async (id) => {
         throw error;
     }
 }
+
+//check product
+module.exports.checkProduct = async (id) => {
+    try {
+        return await Product.findById(id);
+    }
+    catch (error) {
+        throw error;
+    }
+}

@@ -10,14 +10,12 @@ const { CONST_KEY } = require('../../../utils/const_key');
 //list all Users
 exports.listAllUsers = async (req, res) => {
     try {
-        if (req.user.role !== "Admin") {
-            return errorResponse(req, res, status.UNAUTHORIZED, ERROR_MESSAGE.UNAUTHORIZED_USER);
-        }
-
+        const user = req.user;
         const allUsers = await userDao.getAllUser();
         if (!allUsers) {
             return errorResponse(req, res, status.NOT_FOUND, ERROR_MESSAGE.USERS_NOT_FOUND);
         }
+
         const formattedUser = {
             manager: allUsers
                 .filter(user => user.role === 'Manager')
@@ -37,7 +35,7 @@ exports.listAllUsers = async (req, res) => {
                 })),
         };
 
-        return successResponse(req, res, status.OK, SUCCESS_MESSAGE.USERS_LISTED, formattedUser);
+        return successResponse(req, res, status.OK, SUCCESS_MESSAGE.USERS_LISTED, user.role === "Admin" ? formattedUser : { staff: formattedUser.staff });
     } catch (error) {
         return errorResponse(req, res, status.INTERNAL_SERVER_ERROR, error.message, error)
     }

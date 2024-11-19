@@ -16,7 +16,4 @@ router.post('/login', managerController.userLogin);
 router.get("/users", authentication, listAllUsers);
 router.put("/users/update/:userId", authentication, updateUserData);
 
-//product management
-router.post("/product/add", authentication, validate(addProduct.body), productController.addProduct);
-
 module.exports = router;

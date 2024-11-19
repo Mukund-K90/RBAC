@@ -4,7 +4,10 @@ const Token = require('../model/authTokens');
 const Admin = require('../model/user');
 const { errorResponse } = require('../utils/apiResponse');
 const { CONFIG } = require('../config/config');
-const authentication = async (req, res, next) => {
+const { status } = require("http-status");
+const { ERROR_MESSAGE } = require("../helper/error.message");
+
+exports.authentication = async (req, res, next) => {
     try {
         const token = req.headers["authorization"];
         if (!token) {
@@ -48,6 +51,11 @@ const authentication = async (req, res, next) => {
 };
 
 
-module.exports = {
-    authentication
-}
+//check role base access
+exports.authorizeRoles = (allowedRoles) => (req, res, next) => {
+    const userRole = req.user.role;
+    if (!allowedRoles.includes(userRole)) {
+        return errorResponse(req, res, status.UNAUTHORIZED, ERROR_MESSAGE.UNAUTHORIZED_USER);
+    }
+    next();
+};

@@ -29,10 +29,17 @@ app.use("/v1/staff", staffRoutes);
 const managerRoutes = require('./src/routes/manager/managerRoute');
 app.use("/v1/manager", managerRoutes);
 
+//user routes
+const userRoutes = require('./src/routes/user/userRoute');
+app.use("/v1/user", userRoutes);
+
 //product routes
 const productRoutes = require('./src/routes/product/productRoute');
 app.use("/v1/product", productRoutes);
 
+//order routes
+const orderRoutes = require('./src/routes/order/orderRoute');
+app.use("/v1/order", orderRoutes);
 
 //listen server
 const port = CONFIG.port || 3000;

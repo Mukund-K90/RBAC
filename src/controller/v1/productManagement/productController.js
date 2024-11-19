@@ -42,17 +42,19 @@ exports.listProduct = async (req, res) => {
 //update product
 exports.updateProduct = async (req, res) => {
     try {
-        if (req.user.role !== CONST_KEY.ROLE.ADMIN && req.user.role !== CONST_KEY.ROLE.MANAGER) {
-            return errorResponse(req, res, status.UNAUTHORIZED, ERROR_MESSAGE.UNAUTHORIZED_USER);
-        }
         const productId = req.params.productId;
         const newData = req.body;
+        const isExist = await productDao.checkProduct(productId);
+        if (!isExist) {
+            return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.PRODUCT_NOT_FOUND);
+        }
         const product = await productDao.update(productId, newData);
         if (!product) {
             return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.DATA_NOT_UPDATE);
         }
-        return successResponse(req, res, status.OK, SUCCESS_MESSAGE.DATA_UPDATED, product);
+        return successResponse(req, res, status.OK, SUCCESS_MESSAGE.DATA_UPDATED, { id: product._id });
     } catch (error) {
+
         return errorResponse(req, res, status.INTERNAL_SERVER_ERROR, error.message);
     }
 }
@@ -60,10 +62,12 @@ exports.updateProduct = async (req, res) => {
 //delete product
 exports.deleteProduct = async (req, res) => {
     try {
-        if (req.user.role !== CONST_KEY.ROLE.ADMIN && req.user.role !== CONST_KEY.ROLE.MANAGER) {
-            return errorResponse(req, res, status.UNAUTHORIZED, ERROR_MESSAGE.UNAUTHORIZED_USER);
-        }
         const productId = req.params.productId;
+
+        const isExist = await productDao.checkProduct(productId);
+        if (!isExist) {
+            return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.PRODUCT_NOT_FOUND);
+        }
         const product = await productDao.delete(productId);
         if (!product) {
             return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.PRODUCT_NOT_DELETED);
