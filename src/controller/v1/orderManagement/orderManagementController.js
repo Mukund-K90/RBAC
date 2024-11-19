@@ -1,19 +1,21 @@
 const { default: status } = require("http-status");
 const orderDao = require("../../../dao/v1/orderManagement/orderManagementDao");
-const { checkProduct } = require("../../../dao/v1/productManagement/productDao");
+const { checkProduct, update } = require("../../../dao/v1/productManagement/productDao");
 const { errorResponse, successResponse } = require('../../../utils/apiResponse');
 const { ERROR_MESSAGE } = require("../../../helper/error.message");
 const { SUCCESS_MESSAGE } = require("../../../helper/success.message");
 
 
-//add order
+//placed order
 exports.addOrder = async (req, res) => {
     try {
         const orderData = req.body;
-        const isExist = await checkProduct(orderData.product);
-        if (!isExist) {
-            return errorResponse(req, res, status.NOT_FOUND, "Product not found");
+        const product = await checkProduct(orderData.product);
+        if (!product || product.stock === 0) {
+            return errorResponse(req, res, status.NOT_FOUND, "Product not Available");
         }
+        product.stock -= orderData.quantity;
+        await update(product._id, { stock: product.stock })
         const order = await orderDao.add(orderData);
         if (!order) {
             return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.ORDER_NOT_ADD)
@@ -59,7 +61,13 @@ exports.updateOrderStatus = async (req, res) => {
         if (!order) {
             return errorResponse(req, res, status.NOT_FOUND, "Order not found");
         }
-        const updateOrder = await orderDao.updateStatus(orderId, req.body.status);
+        const status = req.body.status;
+        const updateOrder = await orderDao.updateStatus(orderId, status);
+
+        if (status === "Cancelled") {
+            order.product.stock += order.quantity;
+            await update(order.product, { stock: order.product.stock });
+        }
         if (!updateOrder) {
             return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.STATUS_NOT_UPDATE)
         }

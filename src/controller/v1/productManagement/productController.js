@@ -44,12 +44,15 @@ exports.updateProduct = async (req, res) => {
     try {
         const productId = req.params.productId;
         const newData = req.body;
-        const isExist = await productDao.checkProduct(productId);
-        if (!isExist) {
+        const product = await productDao.checkProduct(productId);
+        if (!product) {
             return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.PRODUCT_NOT_FOUND);
         }
-        const product = await productDao.update(productId, newData);
-        if (!product) {
+        if (newData.stock) {
+            newData.stock += product.stock
+        }
+        const updatedProductproduct = await productDao.update(productId, newData);
+        if (!updatedProductproduct) {
             return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.DATA_NOT_UPDATE);
         }
         return successResponse(req, res, status.OK, SUCCESS_MESSAGE.DATA_UPDATED, { id: product._id });

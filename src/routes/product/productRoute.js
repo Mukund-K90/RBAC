@@ -12,4 +12,4 @@ router.get("/", authentication, authorizeRoles([CONST_KEY.ROLE.ADMIN, CONST_KEY.
 router.put("/update/:productId", authentication, authorizeRoles([CONST_KEY.ROLE.ADMIN, CONST_KEY.ROLE.MANAGER]), productController.updateProduct);
 router.delete("/delete/:productId", authentication, authorizeRoles([CONST_KEY.ROLE.ADMIN, CONST_KEY.ROLE.MANAGER]), productController.deleteProduct);
 
-module.exports = router; 
+module.exports = router;
