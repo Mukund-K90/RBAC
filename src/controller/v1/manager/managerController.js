@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const { SUCCESS_MESSAGE } = require('../../../helper/success.message');
 const { createUserSession } = require('../../../utils/jwt');
 
-//user User
+//user signup
 exports.userSignUp = async (req, res) => {
     try {
         const { username, email, password, role } = req.body;
@@ -38,7 +38,7 @@ exports.userLogin = async (req, res) => {
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return successResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.COMPARE_PASSWORD)
+            return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.COMPARE_PASSWORD)
         }
         const sessionResponse = createUserSession(user);
         const token = (await sessionResponse).sessionToken;

@@ -9,9 +9,6 @@ const { CONST_KEY } = require('../../../utils/const_key');
 //add product
 exports.addProduct = async (req, res) => {
     try {
-        if (req.user.role !== CONST_KEY.ROLE.ADMIN && req.user.role !== CONST_KEY.ROLE.MANAGER) {
-            return errorResponse(req, res, status.UNAUTHORIZED, ERROR_MESSAGE.UNAUTHORIZED_USER);
-        }
         const productData = req.body;
         const product = await productDao.add(productData);
         if (!product) {
@@ -26,9 +23,6 @@ exports.addProduct = async (req, res) => {
 //list all product
 exports.listProduct = async (req, res) => {
     try {
-        if (req.user.role !== CONST_KEY.ROLE.ADMIN && req.user.role !== CONST_KEY.ROLE.MANAGER) {
-            return errorResponse(req, res, status.UNAUTHORIZED, ERROR_MESSAGE.UNAUTHORIZED_USER);
-        }
         const product = await productDao.list();
         if (!product) {
             return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.PRODUCT_NOT_ADD); f

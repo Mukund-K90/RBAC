@@ -17,7 +17,7 @@ exports.adminLogin = async (req, res) => {
 
         const isPasswordValid = await bcrypt.compare(password, admin.password);
         if (!isPasswordValid) {
-            return successResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.COMPARE_PASSWORD)
+            return errorResponse(req, res, status.UNAUTHORIZED, ERROR_MESSAGE.COMPARE_PASSWORD)
         }
         const sessionResponse = createUserSession(admin);
         const token = (await sessionResponse).sessionToken;

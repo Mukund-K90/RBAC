@@ -11,16 +11,19 @@ exports.addOrder = async (req, res) => {
     try {
         const orderData = req.body;
         const product = await checkProduct(orderData.product);
-        if (!product || product.stock === 0) {
-            return errorResponse(req, res, status.NOT_FOUND, "Product not Available");
+        if (!product) {
+            return errorResponse(req, res, status.NOT_FOUND, ERROR_MESSAGE.PRODUCT_NOT_FOUND);
         }
+        if (orderData.quantity > product.stock) {
+            return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.INSUFFICIENT_STOCK);
+        }        
         product.stock -= orderData.quantity;
         await update(product._id, { stock: product.stock })
         const order = await orderDao.add(orderData);
         if (!order) {
             return errorResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.ORDER_NOT_ADD)
         }
-        return successResponse(req, res, status.OK, SUCCESS_MESSAGE.ORDER_PLACED, {});
+        return successResponse(req, res, status.OK, SUCCESS_MESSAGE.ORDER_PLACED, { orderId: order._id });
     } catch (error) {
         return errorResponse(req, res, status.INTERNAL_SERVER_ERROR, error.message);
     }

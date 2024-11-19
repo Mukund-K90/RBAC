@@ -18,6 +18,7 @@ module.exports.ERROR_MESSAGE = {
 
     ORDER_NOT_ADD: "Order not placed",
     STATUS_NOT_UPDATE: "Status not updated",
+    INSUFFICIENT_STOCK: "Out of stock",
 
     COMPARE_PASSWORD: "Password does not match.",
     TOKEN_SAVE_FAILED: "Failed to save token.",

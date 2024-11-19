@@ -38,7 +38,7 @@ exports.userLogin = async (req, res) => {
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return successResponse(req, res, status.BAD_REQUEST, ERROR_MESSAGE.COMPARE_PASSWORD)
+            return errorResponse(req, res, status.UNAUTHORIZED, ERROR_MESSAGE.COMPARE_PASSWORD)
         }
         const sessionResponse = createUserSession(user);
         const token = (await sessionResponse).sessionToken;
